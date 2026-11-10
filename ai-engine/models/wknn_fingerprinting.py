@@ -70,3 +70,4 @@ class WKNNFingerprinting:
             confidence_score,
             max(0.8, uncertainty_radius_m)
         )
+

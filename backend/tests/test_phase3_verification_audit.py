@@ -14,6 +14,8 @@ from app.models.user import User, Role, UserRole
 from app.models.consent import ConsentRecord
 from app.models.localization import LocalizationEstimate
 from app.models.occupancy import OccupancyRecord
+from app.auth.jwt_handler import create_access_token
+
 
 @pytest.fixture(scope="session", autouse=True)
 async def ensure_db_ready():
@@ -248,10 +250,16 @@ def test_audit_websocket_telemetry_and_disconnect():
     """
     INDEPENDENT AUDIT: Verify WebSocket connection, live telemetry packet, heartbeat ack, and disconnect.
     """
+    token = create_access_token({
+        "sub": "usr-super-01",
+        "email": "director.research@wifisense3d.org",
+        "role": "SUPER_ADMIN"
+    })
     client = TestClient(app)
-    with client.websocket_connect("/ws/telemetry") as websocket:
+    with client.websocket_connect(f"/ws/telemetry?token={token}") as websocket:
         # Send heartbeat ping
         websocket.send_text("PING")
         response = websocket.receive_json()
         assert response["type"] == "HEARTBEAT_ACK"
         assert "timestamp" in response
+

@@ -10,6 +10,10 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("APP_SECRET_KEY", "wifisense-3d-cryptographically-secure-signing-key-for-research-2026")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 # 24 hours
+    JWT_ISSUER: str = os.getenv("JWT_ISSUER", "wifisense-auth")
+    JWT_AUDIENCE: str = os.getenv("JWT_AUDIENCE", "wifisense-frontend")
+    MAX_TELEMETRY_AGE_SEC: float = float(os.getenv("MAX_TELEMETRY_AGE_SEC", "5.0"))
+
     
     # Database
     DATABASE_URL: str = os.getenv(

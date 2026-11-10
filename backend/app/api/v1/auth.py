@@ -36,8 +36,10 @@ async def login(payload: LoginRequest, db: AsyncSession = Depends(get_db)):
         "email": user.email,
         "role": primary_role,
         "org_id": user.assigned_building_id,
-        "permissions": roles
+        "permissions": roles,
+        "univ_id": user.university_id
     }
+
     access_token = create_access_token(token_data, expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
 
     # Audit log entry

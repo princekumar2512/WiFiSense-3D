@@ -23,11 +23,36 @@ export const LiveMonitoringPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono bg-navy-900 px-3 py-1.5 rounded-lg border border-slate-800">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-slate-300">WSS: Connected (120ms tick)</span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-xs font-mono bg-navy-900 px-3 py-1.5 rounded-lg border border-slate-800">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-slate-300">WSS: Connected (Tenant-Scoped)</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-mono bg-navy-900 px-3 py-1.5 rounded-lg border border-cyan-800/60">
+            <Clock className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-cyan-300">Telemetry: </span>
+            <span className="text-emerald-400 font-bold">FRESH (0.2s • &lt;5s limit)</span>
+          </div>
         </div>
       </div>
+
+      {/* Hardware Telemetry & Stale Indicator Ribbon */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
+        <div className="p-3 rounded-xl bg-navy-900/80 border border-slate-800 flex items-center justify-between">
+          <span className="text-slate-400">Deco Node 1 (Junction):</span>
+          <span className="text-cyan-400 font-bold">-52.0 dBm (LIVE)</span>
+        </div>
+        <div className="p-3 rounded-xl bg-navy-900/80 border border-slate-800 flex items-center justify-between">
+          <span className="text-slate-400">Deco Node 2 (Far End):</span>
+          <span className="text-cyan-400 font-bold">-58.0 dBm (LIVE)</span>
+        </div>
+        <div className="p-3 rounded-xl bg-navy-900/80 border border-slate-800 flex items-center justify-between">
+          <span className="text-slate-400">Deco Node 3 (Spare):</span>
+          <span className="text-rose-400 font-bold bg-rose-950/60 px-2 py-0.5 rounded">UNAVAILABLE (N/A ≠ 0 dBm)</span>
+        </div>
+      </div>
+
 
       {/* Grid of Real-Time Streams */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

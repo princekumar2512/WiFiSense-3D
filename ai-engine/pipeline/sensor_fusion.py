@@ -89,3 +89,4 @@ class ExtendedKalmanFilter2D:
         uncertainty_radius = float(np.sqrt(np.max(np.abs(eigenvalues))))
 
         return float(self.x[0]), float(self.x[1]), uncertainty_radius
+

@@ -61,3 +61,4 @@ class RandomForestLocalizer:
             "uncertainty_radius_m": uncertainty_radius,
             "model_version": "RandomForest-v1.2"
         }
+
