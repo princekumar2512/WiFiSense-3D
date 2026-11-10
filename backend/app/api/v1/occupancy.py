@@ -88,3 +88,4 @@ async def record_occupancy_event(payload: OccupancyEventCreate, db: AsyncSession
     await db.commit()
     await db.refresh(record)
     return record
+

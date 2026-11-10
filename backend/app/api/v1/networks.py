@@ -94,3 +94,4 @@ async def update_network_node(
 
     await db.commit()
     return {"message": "Node updated successfully", "id": node.id}
+

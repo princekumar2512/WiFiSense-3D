@@ -32,3 +32,4 @@ def decode_access_token(token: str) -> Optional[TokenData]:
         )
     except Exception:
         return None
+

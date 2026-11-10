@@ -30,3 +30,4 @@ class ConnectionManager:
                 self.disconnect(connection)
 
 ws_manager = ConnectionManager()
+

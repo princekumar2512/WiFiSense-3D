@@ -31,3 +31,4 @@ class NodeUpdate(BaseModel):
     pos_z: Optional[float] = None
     status: Optional[str] = None
     notes: Optional[str] = None
+

@@ -177,3 +177,4 @@ async def save_building_configuration(
     await db.commit()
 
     return {"message": "Building configuration successfully persisted to database", "status": "SAVED"}
+

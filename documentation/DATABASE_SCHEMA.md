@@ -58,3 +58,4 @@ WiFiSense 3D uses a normalized relational schema with spatial geospatial extensi
 ### 2.4 Dual Sensing Separation
 - **`localization_estimates`**: Consented participant indoor position. Requires valid `consent_id`. Contains estimated floor, room, coordinates, confidence score, and uncertainty bounds (`±1.4m`).
 - **`occupancy_records`**: Device-free ambient RF perturbation estimates. Stores **strictly zero personal identifiers, device MACs, or user tokens**.
+

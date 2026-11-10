@@ -122,3 +122,4 @@ async def get_participant_location_history(
         }
         for h in history
     ]
+

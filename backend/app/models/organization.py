@@ -101,3 +101,4 @@ class Room(Base):
 
     # Relationships
     floor: Mapped["Floor"] = relationship("Floor", back_populates="rooms")
+

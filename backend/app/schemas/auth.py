@@ -25,3 +25,4 @@ class UserProfileSchema(BaseModel):
     is_active: bool
     is_verified: bool
     allowed_permissions: List[str]
+

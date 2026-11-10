@@ -32,3 +32,4 @@ class PrivacyRequest(Base):
     requested_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     audit_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+

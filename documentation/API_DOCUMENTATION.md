@@ -137,3 +137,4 @@ Connect via `ws://localhost:8000/ws/telemetry` for live streaming:
   "confidence_pct": 88.2
 }
 ```
+

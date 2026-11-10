@@ -4,7 +4,7 @@ from sqlalchemy import select
 from app.main import app
 from app.core.database import AsyncSessionLocal
 from app.core.init_db import init_database
-from app.models.organization import Building, Floor, Room
+from app.models.organization import Building, Floor, Room, University
 from app.models.user import User
 
 @pytest.fixture(scope="session", autouse=True)
@@ -77,7 +77,7 @@ async def test_auth_login_and_jwt_verification():
 async def test_rbac_and_building_config_permissions():
     """Verify that unauthenticated/guest users cannot modify building configuration, but admins can."""
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
-        # 1. Guest attempts to update building -> Denied (403 or 401)
+        # 1. Guest attempts to update building -> Denied (401 or 403)
         guest_update = await ac.post("/api/v1/buildings/hostel-block-alpha/save-config", json={
             "name": "Hacked Building Name"
         })
@@ -104,6 +104,36 @@ async def test_rbac_and_building_config_permissions():
         )
         assert admin_update.status_code == 200
         assert admin_update.json()["status"] == "SAVED"
+
+@pytest.mark.asyncio
+async def test_university_and_multi_tenancy_crud():
+    """Verify multi-university management and tenant isolation."""
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        # 1. List universities
+        univ_res = await ac.get("/api/v1/universities")
+        assert univ_res.status_code == 200
+        univs = univ_res.json()
+        assert len(univs) >= 1
+        assert any(u["code"] == "APEX-UNIV" for u in univs)
+
+        # 2. Super Admin can create another university tenant
+        admin_login = await ac.post("/api/v1/auth/login", json={
+            "email": "director.research@wifisense3d.org",
+            "password": "SuperAdmin@123"
+        })
+        admin_token = admin_login.json()["access_token"]
+
+        create_res = await ac.post(
+            "/api/v1/universities",
+            headers={"Authorization": f"Bearer {admin_token}"},
+            json={
+                "code": "IIT-DELHI-TEST",
+                "name": "Indian Institute of Technology Delhi (Partner Pilot)",
+                "country": "India",
+                "city": "New Delhi"
+            }
+        )
+        assert create_res.status_code in [201, 400] # 201 or already created
 
 @pytest.mark.asyncio
 async def test_dpdp_consent_enforcement_and_localization():

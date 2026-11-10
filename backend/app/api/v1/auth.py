@@ -99,3 +99,4 @@ async def logout(current_user: User = Depends(get_current_user), db: AsyncSessio
     ))
     await db.commit()
     return {"message": "Logged out successfully", "status": "TERMINATED"}
+

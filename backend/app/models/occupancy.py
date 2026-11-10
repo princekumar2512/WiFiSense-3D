@@ -27,3 +27,4 @@ class OccupancyRecord(Base):
     detection_method: Mapped[str] = mapped_column(String(64), default="RF_PERTURBATION")
     is_simulated: Mapped[bool] = mapped_column(Boolean, default=True)
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+

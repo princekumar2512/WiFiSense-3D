@@ -76,3 +76,4 @@ def check_tenant_isolation(user: User, university_id: Optional[str]):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Tenant Isolation Violation: Access to other universities is prohibited."
         )
+

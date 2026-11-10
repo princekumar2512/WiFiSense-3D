@@ -126,3 +126,4 @@ async def request_data_erasure(
     await db.commit()
 
     return {"message": "Data erasure request processed successfully.", "request_id": req.id}
+

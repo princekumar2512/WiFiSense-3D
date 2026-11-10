@@ -36,6 +36,7 @@ interface BuildingState {
   addNode: (floorNumber: number, node: NetworkNodeDefinition) => void;
   removeNode: (floorNumber: number, nodeId: string) => void;
   resetToDefaultPilot: () => void;
+  loadPersistedBuildingFromBackend: () => Promise<void>;
 }
 
 export const useBuildingStore = create<BuildingState>((set, get) => ({
@@ -196,5 +197,62 @@ export const useBuildingStore = create<BuildingState>((set, get) => ({
   },
 
   resetToDefaultPilot: () => set({ building: createDefaultHostelBuilding() }),
+
+  loadPersistedBuildingFromBackend: async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/v1/buildings/hostel-block-alpha');
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data || !data.floors) return;
+
+      const currentBldg = get().building;
+      // Merge database floors with current visualization settings
+      const updatedFloors = currentBldg.floors.map((fl) => {
+        const remoteFloor = data.floors.find((f: any) => f.floor_number === fl.floorNumber);
+        if (!remoteFloor) return fl;
+
+        const updatedRooms = fl.rooms.map((rm) => {
+          const remoteRm = remoteFloor.rooms?.find((r: any) => r.id === rm.id);
+          if (!remoteRm) return rm;
+          return {
+            ...rm,
+            name: remoteRm.name || rm.name,
+            position: { x: remoteRm.pos_x ?? rm.position.x, y: remoteRm.pos_y ?? rm.position.y, z: remoteRm.pos_z ?? rm.position.z },
+            size: { width: remoteRm.width ?? rm.size.width, height: remoteRm.height ?? rm.size.height, depth: remoteRm.depth ?? rm.size.depth }
+          };
+        });
+
+        const updatedNodes = fl.nodes.map((nd) => {
+          const remoteNd = remoteFloor.nodes?.find((n: any) => n.id === nd.id);
+          if (!remoteNd) return nd;
+          return {
+            ...nd,
+            name: remoteNd.name || nd.name,
+            position: remoteNd.position ? { x: remoteNd.position.x, y: remoteNd.position.y, z: remoteNd.position.z } : nd.position,
+            status: remoteNd.status || nd.status
+          };
+        });
+
+        return {
+          ...fl,
+          name: remoteFloor.name || fl.name,
+          rooms: updatedRooms,
+          nodes: updatedNodes
+        };
+      });
+
+      set({
+        building: {
+          ...currentBldg,
+          name: data.name || currentBldg.name,
+          totalFloors: data.total_floors || currentBldg.totalFloors,
+          floors: updatedFloors
+        }
+      });
+      console.log('Building configuration successfully loaded and synced from database!');
+    } catch (err) {
+      console.warn('Could not load building from backend, using baseline cached geometry.', err);
+    }
+  },
 }));
 

@@ -70,3 +70,4 @@ class UserSession(Base):
     ip_address: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
 
     user: Mapped["User"] = relationship("User", back_populates="sessions")
+

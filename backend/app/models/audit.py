@@ -28,3 +28,4 @@ class SystemEvent(Base):
     severity: Mapped[str] = mapped_column(String(32), default="INFO") # 'INFO', 'WARNING', 'CRITICAL'
     description: Mapped[str] = mapped_column(Text, nullable=False)
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+

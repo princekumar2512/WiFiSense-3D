@@ -12,7 +12,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.init_db import init_database
 from app.api.v1.auth import router as auth_router
+from app.api.v1.universities import router as universities_router
 from app.api.v1.buildings import router as buildings_router
+from app.api.v1.floors import router as floors_router
+from app.api.v1.rooms import router as rooms_router
 from app.api.v1.consent import router as consent_router
 from app.api.v1.localization import router as localization_router
 from app.api.v1.occupancy import router as occupancy_router
@@ -87,7 +90,10 @@ app.add_middleware(
 
 # Mount Modular Routers
 app.include_router(auth_router, prefix=settings.API_V1_STR)
+app.include_router(universities_router, prefix=settings.API_V1_STR)
 app.include_router(buildings_router, prefix=settings.API_V1_STR)
+app.include_router(floors_router, prefix=settings.API_V1_STR)
+app.include_router(rooms_router, prefix=settings.API_V1_STR)
 app.include_router(consent_router, prefix=settings.API_V1_STR)
 app.include_router(localization_router, prefix=settings.API_V1_STR)
 app.include_router(occupancy_router, prefix=settings.API_V1_STR)

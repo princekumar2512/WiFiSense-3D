@@ -79,3 +79,4 @@ export async function revokeConsentOnBackend(userId: string, token?: string) {
   });
   return res.json();
 }
+

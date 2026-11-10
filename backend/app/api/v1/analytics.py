@@ -51,3 +51,4 @@ async def get_ml_algorithm_benchmarks():
         {"model": "Support Vector Machine (RBF)", "floor_accuracy": 96.1, "room_accuracy": 88.3, "mean_error_m": 1.8, "inference_ms": 5.1},
         {"model": "Sensor Fusion + EKF Filter", "floor_accuracy": 99.1, "room_accuracy": 94.8, "mean_error_m": 1.2, "inference_ms": 8.5}
     ]
+

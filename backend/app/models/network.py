@@ -58,3 +58,4 @@ class Sensor(Base):
     status: Mapped[str] = mapped_column(String(32), default="ACTIVE")
     battery_pct: Mapped[Optional[float]] = mapped_column(Float, default=100.0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+

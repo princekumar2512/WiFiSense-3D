@@ -21,3 +21,4 @@ class LocalizationResponseSchema(BaseModel):
     activity: str
     model_version: str
     timestamp: datetime
+

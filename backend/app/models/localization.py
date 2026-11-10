@@ -28,3 +28,4 @@ class LocalizationEstimate(Base):
     data_sources_json: Mapped[str] = mapped_column(Text, default='["WIFI_RSSI"]')
     model_version: Mapped[str] = mapped_column(String(32), default="EKF-RF-v1.2")
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+

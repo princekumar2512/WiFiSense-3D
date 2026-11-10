@@ -40,3 +40,4 @@ WiFiSense 3D implements a decoupled identity provider architecture compatible wi
 - **Revocation**: A single API call (`POST /consent/revoke`) halts all participant tracking immediately and invalidates active session tokens.
 - **Right to Erasure (Sec 12)**: Endpoints queue all historical localization traces for immediate cryptographic shredding.
 - **Air-Gapped Anonymous Stream**: Ambient RF perturbation analysis is isolated in separate database tables and never linked with resident accounts.
+
