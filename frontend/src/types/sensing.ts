@@ -58,3 +58,4 @@ export interface SystemHealthSummary {
   lastTelemetryPing: string;
   unresolvedAlerts: number;
 }
+

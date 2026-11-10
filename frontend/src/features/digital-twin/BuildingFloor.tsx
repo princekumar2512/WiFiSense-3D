@@ -109,3 +109,4 @@ export const BuildingFloor: React.FC<BuildingFloorProps> = ({
     </group>
   );
 };
+

@@ -197,3 +197,4 @@ export const useBuildingStore = create<BuildingState>((set, get) => ({
 
   resetToDefaultPilot: () => set({ building: createDefaultHostelBuilding() }),
 }));
+

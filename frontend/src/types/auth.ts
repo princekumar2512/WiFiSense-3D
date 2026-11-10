@@ -29,3 +29,4 @@ export interface DPDPNoticeRecord {
   dataItemsCollected: string[];
   lastUpdated: string;
 }
+

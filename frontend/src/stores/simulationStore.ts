@@ -50,3 +50,4 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     set({ simulatedOccupantCount: current + 15 });
   },
 }));
+

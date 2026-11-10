@@ -103,3 +103,4 @@ WiFiSense 3D follows an incremental, test-driven, phase-by-phase roadmap ensurin
 ### Phase 9: Testing, Optimization & Deployment
 - [ ] Docker Compose orchestration (Frontend, Backend, Postgres, Redis, Keycloak).
 - [ ] Performance profiling: 60 FPS 3D rendering and sub-100ms telemetry latency.
+

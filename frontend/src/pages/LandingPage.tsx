@@ -290,3 +290,4 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
     </div>
   );
 };
+

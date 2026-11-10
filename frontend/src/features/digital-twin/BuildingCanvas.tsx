@@ -306,3 +306,4 @@ export const BuildingCanvas: React.FC<BuildingCanvasProps> = ({
     </div>
   );
 };
+

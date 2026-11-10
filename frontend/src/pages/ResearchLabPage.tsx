@@ -191,3 +191,4 @@ export const ResearchLabPage: React.FC = () => {
     </div>
   );
 };
+

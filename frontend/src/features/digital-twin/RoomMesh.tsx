@@ -93,3 +93,4 @@ export const RoomMesh: React.FC<RoomMeshProps> = ({ room, floorElevationY, wallT
     </group>
   );
 };
+

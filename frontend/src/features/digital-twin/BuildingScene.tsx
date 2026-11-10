@@ -54,3 +54,4 @@ export const BuildingScene: React.FC = () => {
     </group>
   );
 };
+

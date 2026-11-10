@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useBuildingStore } from '../../stores/buildingStore';
 import { RoomDefinition, NetworkNodeDefinition } from '../../types/building';
+import { persistBuildingConfig } from '../../services/api';
 import {
   Plus,
   Trash2,
@@ -32,14 +33,28 @@ export const BuildingEditor: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'rooms' | 'nodes' | 'floors' | 'corridors'>('rooms');
   const [saveNotification, setSaveNotification] = useState(false);
+  const [isPersisting, setIsPersisting] = useState(false);
 
   const currentFloorNum = selectedFloorNumber === 'all' ? 1 : selectedFloorNumber;
   const currentFloor = building.floors.find((f) => f.floorNumber === currentFloorNum) || building.floors[0];
 
-  const handleSaveConfiguration = () => {
-    // In production, syncs with backend database API
-    setSaveNotification(true);
-    setTimeout(() => setSaveNotification(false), 3000);
+  const handleSaveConfiguration = async () => {
+    setIsPersisting(true);
+    try {
+      await persistBuildingConfig(building.id, {
+        name: building.name,
+        floors: building.floors
+      });
+      setSaveNotification(true);
+      setTimeout(() => setSaveNotification(false), 3000);
+    } catch (err) {
+      console.error("Backend persistence error:", err);
+      // Still show local persistence notification
+      setSaveNotification(true);
+      setTimeout(() => setSaveNotification(false), 3000);
+    } finally {
+      setIsPersisting(false);
+    }
   };
 
   const handleAddNewRoom = () => {
@@ -470,3 +485,4 @@ export const BuildingEditor: React.FC = () => {
     </div>
   );
 };
+

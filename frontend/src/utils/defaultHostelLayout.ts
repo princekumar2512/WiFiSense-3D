@@ -341,3 +341,4 @@ export const createDefaultHostelBuilding = (): BuildingDefinition => {
     },
   };
 };
+

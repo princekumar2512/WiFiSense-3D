@@ -130,3 +130,4 @@ export const OccupantMarker: React.FC<OccupantMarkerProps> = ({
     </group>
   );
 };
+

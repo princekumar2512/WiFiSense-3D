@@ -79,3 +79,4 @@ export const HeatmapOverlay: React.FC<HeatmapOverlayProps> = ({
     </group>
   );
 };
+

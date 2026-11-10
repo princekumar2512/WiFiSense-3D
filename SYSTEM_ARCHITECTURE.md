@@ -144,3 +144,4 @@ PostgreSQL multi-tenancy is structured around hierarchical RBAC:
 - **Database & Messaging**: PostgreSQL 16 with PostGIS extension, Redis 7 (Pub/Sub & session cache).
 - **Identity & Security**: Keycloak 24+ / OAuth2 + OpenID Connect, JWT (RS256), TLS 1.3.
 - **Containerization**: Docker, Docker Compose multi-stage builds.
+

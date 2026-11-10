@@ -270,3 +270,4 @@ CREATE INDEX idx_loc_estimates_user_time ON localization_estimates(user_id, time
 CREATE INDEX idx_loc_estimates_spatial ON localization_estimates USING GIST(estimated_point);
 CREATE INDEX idx_occupancy_floor_time ON occupancy_records(floor_id, timestamp DESC);
 CREATE INDEX idx_audit_time ON audit_logs(timestamp DESC);
+

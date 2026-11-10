@@ -114,3 +114,4 @@ export const CorridorMesh: React.FC<CorridorMeshProps> = ({
     </group>
   );
 };
+

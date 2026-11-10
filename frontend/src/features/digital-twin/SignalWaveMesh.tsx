@@ -66,3 +66,4 @@ export const SignalWaveMesh: React.FC<SignalWaveMeshProps> = ({
     </group>
   );
 };
+

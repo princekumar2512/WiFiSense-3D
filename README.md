@@ -80,3 +80,4 @@ WiFiSense 3D strictly adheres to privacy-by-design principles:
 - **Zero Unconsented Tracking**: Individual positioning is disabled by default and activated only when an authenticated participant provides explicit consent with an active session token.
 - **Anonymous Occupancy**: RF spatial sensing estimates room density and motion index without capturing or storing MAC addresses, device identifiers, or biometric profiles.
 - **Compliance Alignment**: System workflows are designed in accordance with the provisions of India's Digital Personal Data Protection Act, 2023.
+

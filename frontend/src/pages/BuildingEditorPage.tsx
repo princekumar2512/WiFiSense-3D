@@ -47,3 +47,4 @@ export const BuildingEditorPage: React.FC = () => {
     </div>
   );
 };
+
