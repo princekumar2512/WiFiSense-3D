@@ -70,10 +70,25 @@ def check_tenant_isolation(user: User, university_id: Optional[str]):
     """Strictly prevents cross-university data leakage."""
     if not university_id:
         return
-    # Super admins can access any university
     if user.university_id and user.university_id != university_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Tenant Isolation Violation: Access to other universities is prohibited."
         )
+
+
+async def verify_tenant_isolation(user: User, target_university_id: Optional[str], db: AsyncSession):
+    """Asynchronously verifies tenant boundaries, permitting SUPER_ADMIN cross-tenant access."""
+    if not target_university_id:
+        return
+    res = await db.execute(select(UserRole.role_id).where(UserRole.user_id == user.id))
+    roles = res.scalars().all()
+    if "SUPER_ADMIN" in roles:
+        return
+    if user.university_id and user.university_id != target_university_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Tenant Isolation Violation: Access to university '{target_university_id}' is forbidden for user from '{user.university_id}'."
+        )
+
 

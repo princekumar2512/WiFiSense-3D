@@ -77,3 +77,4 @@ async def get_university(university_id: str, db: AsyncSession = Depends(get_db))
         "state": univ.state,
         "city": univ.city
     }
+

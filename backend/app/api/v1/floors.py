@@ -69,3 +69,4 @@ async def update_floor(
 
     await db.commit()
     return {"message": "Floor updated successfully", "id": floor.id}
+

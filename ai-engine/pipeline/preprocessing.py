@@ -48,3 +48,4 @@ class SignalPreprocessor:
         """Normalizes RSSI values to [0.0, 1.0] range for neural network and SVM classifiers."""
         clipped = np.clip(rssi_vector, min_rssi, max_rssi)
         return (clipped - min_rssi) / (max_rssi - min_rssi)
+

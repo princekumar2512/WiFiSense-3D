@@ -1,14 +1,16 @@
 from datetime import datetime
 from typing import List, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select, update
+from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
 from app.models.user import User
 from app.models.consent import ConsentRecord, PrivacyRequest
+from app.models.localization import LocalizationEstimate
 from app.models.audit import AuditLog
 from app.schemas.consent import ConsentGrantRequest, ConsentRevokeRequest, ConsentRecordSchema, PrivacyRequestCreate
+
 
 router = APIRouter(prefix="/consent", tags=["Consent & DPDP Act 2023"])
 
@@ -106,12 +108,25 @@ async def request_data_erasure(
     db: AsyncSession = Depends(get_db)
 ):
     """Submit a formal Right to Erasure request under DPDP Act 2023 Sec 12."""
+    # 1. Permanently erase all historical localization estimates for the user
+    delete_res = await db.execute(
+        delete(LocalizationEstimate).where(LocalizationEstimate.user_id == current_user.id)
+    )
+    deleted_count = delete_res.rowcount if hasattr(delete_res, "rowcount") else 0
+
+    # 2. Revoke any active consent
+    await db.execute(
+        update(ConsentRecord)
+        .where(ConsentRecord.user_id == current_user.id, ConsentRecord.is_currently_active == True)
+        .values(is_currently_active=False, revoked_at=datetime.utcnow())
+    )
+
     req = PrivacyRequest(
         user_id=current_user.id,
         request_type=payload.request_type,
         status="PROCESSED",
         completed_at=datetime.utcnow(),
-        audit_notes="Historical location telemetry queued for cryptographic erasure."
+        audit_notes=f"Personal location telemetry permanently erased ({deleted_count} records removed)."
     )
     db.add(req)
 
@@ -121,9 +136,14 @@ async def request_data_erasure(
         action="DATA_ERASURE_REQUESTED",
         resource_type="PRIVACY",
         resource_id=req.id,
-        status="SUCCESS"
+        status="SUCCESS",
+        details_json=f'{{"records_purged": {deleted_count}}}'
     ))
     await db.commit()
 
-    return {"message": "Data erasure request processed successfully.", "request_id": req.id}
+    return {
+        "message": "Data erasure completed successfully under DPDP Act 2023.",
+        "request_id": req.id,
+        "records_purged": deleted_count
+    }
 

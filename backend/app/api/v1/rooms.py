@@ -64,3 +64,4 @@ async def delete_room(
     await db.delete(room)
     await db.commit()
     return {"message": "Room deleted successfully", "id": room_id}
+

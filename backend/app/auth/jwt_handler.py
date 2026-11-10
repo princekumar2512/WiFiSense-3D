@@ -2,10 +2,7 @@ from datetime import datetime, timedelta
 from typing import Optional, Dict, Any, List
 import jwt
 from pydantic import BaseModel
-
-SECRET_KEY = "wifisense-3d-cryptographically-secure-signing-key-for-research"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+from app.core.config import settings
 
 class TokenData(BaseModel):
     user_id: str
@@ -16,13 +13,13 @@ class TokenData(BaseModel):
 
 def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire, "iat": datetime.utcnow()})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 def decode_access_token(token: str) -> Optional[TokenData]:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return TokenData(
             user_id=payload.get("sub", ""),
             email=payload.get("email", ""),
@@ -32,4 +29,5 @@ def decode_access_token(token: str) -> Optional[TokenData]:
         )
     except Exception:
         return None
+
 

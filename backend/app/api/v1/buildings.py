@@ -4,18 +4,28 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
-from app.auth.dependencies import get_current_user, require_role
-from app.models.organization import Building, Floor, Room
+from app.auth.dependencies import get_current_user, require_role, verify_tenant_isolation
+from app.models.organization import Building, Floor, Room, Organization
 from app.models.network import NetworkNode
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.models.audit import AuditLog
 
 router = APIRouter(prefix="/buildings", tags=["Building Management"])
 
 @router.get("", response_model=List[Dict[str, Any]])
-async def list_buildings(db: AsyncSession = Depends(get_db)):
-    """List all registered buildings."""
-    res = await db.execute(select(Building))
+async def list_buildings(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """List registered buildings for the current user's university (or all for SUPER_ADMIN)."""
+    res_roles = await db.execute(select(UserRole.role_id).where(UserRole.user_id == current_user.id))
+    roles = res_roles.scalars().all()
+
+    query = select(Building).options(selectinload(Building.organization))
+    if "SUPER_ADMIN" not in roles and current_user.university_id:
+        query = query.join(Building.organization).where(Organization.university_id == current_user.university_id)
+
+    res = await db.execute(query)
     buildings = res.scalars().all()
     return [
         {
@@ -30,12 +40,17 @@ async def list_buildings(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/{building_id}")
-async def get_building_details(building_id: str, db: AsyncSession = Depends(get_db)):
+async def get_building_details(
+    building_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
     """Retrieve full building structure including all 9 floors, rooms, and Deco nodes."""
     res = await db.execute(
         select(Building)
         .where(Building.id == building_id)
         .options(
+            selectinload(Building.organization),
             selectinload(Building.floors).selectinload(Floor.rooms),
             selectinload(Building.floors).selectinload(Floor.nodes)
         )
@@ -43,6 +58,10 @@ async def get_building_details(building_id: str, db: AsyncSession = Depends(get_
     bldg = res.scalar_one_or_none()
     if not bldg:
         raise HTTPException(status_code=404, detail="Building not found")
+
+    target_univ = bldg.organization.university_id if bldg.organization else None
+    await verify_tenant_isolation(current_user, target_univ, db)
+
 
     return {
         "id": bldg.id,
@@ -120,10 +139,18 @@ async def save_building_configuration(
     Persist updated building architectural configuration (rooms, node locations, dimensions)
     from the Building Editor to the relational database.
     """
-    res = await db.execute(select(Building).where(Building.id == building_id))
+    res = await db.execute(
+        select(Building)
+        .where(Building.id == building_id)
+        .options(selectinload(Building.organization))
+    )
     bldg = res.scalar_one_or_none()
     if not bldg:
         raise HTTPException(status_code=404, detail="Building not found")
+
+    target_univ = bldg.organization.university_id if bldg.organization else None
+    await verify_tenant_isolation(current_user, target_univ, db)
+
 
     # Update basic metadata if provided
     if "name" in payload:
