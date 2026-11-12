@@ -257,3 +257,4 @@ def test_existing_simulation_functionality():
         assert response["type"] == "HEARTBEAT_ACK"
         assert response["user_id"] == "usr-super-01"
         assert "timestamp" in response
+

@@ -2,9 +2,13 @@
 
 > **AI-Powered Wi-Fi Sensing, Indoor Localization, Occupancy Detection and 3D Digital Twin Platform**
 
-[![Status: Production-Grade Research](https://img.shields.io/badge/Status-Research%20%26%20Production-00f5ff?style=for-the-badge)](https://github.com/wifisense-3d)
+[![Status: Work in Progress](https://img.shields.io/badge/Status-Work%20in%20Progress%20(Phase%203.5%20Complete)-f59e0b?style=for-the-badge)](https://github.com/princekumar2512/WiFiSense-3D)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![3D Engine: Three.js](https://img.shields.io/badge/3D%20Engine-Three.js%20%2F%20R3F-4338ca?style=for-the-badge)](https://threejs.org/)
+
+> [!NOTE]
+> **Active Development Notice (Work in Progress):** This platform is under active engineering development by [@princekumar2512](https://github.com/princekumar2512). Phases 0–3.5 (Architecture, 3D Digital Twin, FastAPI Multi-Tenant Backend, DPDP Act 2023 Compliance, and Security Hardening) are implemented and tested; Phase 4+ (AI Engine benchmarking, Hardware Adapters, and Mobile Companion) is in progress. See [PROJECT_STATUS.md](PROJECT_STATUS.md) and [DEVELOPMENT_ROADMAP.md](DEVELOPMENT_ROADMAP.md) for current milestones.
+
 
 ---
 

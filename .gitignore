@@ -5,6 +5,13 @@ backend/venv/
 backend/.venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+backend/.pytest_cache/
+
+# Local Runtime Databases
+*.db
+*.sqlite
+*.sqlite3
 
 # Production Builds
 dist/
